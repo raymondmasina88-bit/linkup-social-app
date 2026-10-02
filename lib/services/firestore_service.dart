@@ -14,7 +14,10 @@ class FirestoreService {
   CollectionReference<Map<String, dynamic>> get storiesRef =>
       _firestore.collection('stories');
 
-  Future<void> createUserProfile(UserModel user) async {
+  CollectionReference<Map<String, dynamic>> get messagesRef =>
+      _firestore.collection('messages');
+
+  Future<void> createUser(UserModel user) async {
     await usersRef.doc(user.uid).set(user.toMap());
   }
 
@@ -34,24 +37,18 @@ class FirestoreService {
     return postsRef
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => PostModel.fromMap(doc.data()))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => PostModel.fromMap(doc.data()))
+              .toList(),
+        );
   }
 
-  Future<void> toggleLike(String postId, String userId) async {
-    final ref = postsRef.doc(postId);
-    final snapshot = await ref.get();
+  Future<void> updateUserField(String uid, String field, dynamic value) async {
+    await usersRef.doc(uid).update({field: value});
+  }
 
-    if (!snapshot.exists) {
-      return;
-    }
-
-    final data = snapshot.data() ?? {};
-    final reactions = Map<String, dynamic>.from(data['reactionCounts'] ?? {});
-    final current = (reactions[userId] as int?) ?? 0;
-    reactions[userId] = current == 1 ? 0 : 1;
-
-    await ref.update({'reactionCounts': reactions});
+  Future<void> deleteUser(String uid) async {
+    await usersRef.doc(uid).delete();
   }
 }

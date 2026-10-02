@@ -11,10 +11,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(milliseconds: 1600), () {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        MaterialPageRoute(builder: (_) => const AuthScreen()),
       );
     });
   }
@@ -24,9 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF4B7BFF), Color(0xFF7A5CFF)],
+            colors: [Color(0xFF4B7BFF), Color(0xFF7A5CFF), Color(0xFF00C2A8)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -61,108 +62,88 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  bool showLogin = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 24),
-              const Text(
-                'Welcome back',
-                style: TextStyle(fontSize: 34, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Sign in to continue to LINK UP',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-              const SizedBox(height: 32),
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Email or phone number',
-                  prefixIcon: Icon(Icons.email_outlined),
-                ),
-              ),
-              const SizedBox(height: 18),
-              TextField(
-                obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: 'Password',
-                  prefixIcon: Icon(Icons.lock_outline),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text('Forgot password?'),
-                ),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(54),
-                  backgroundColor: const Color(0xFF4B7BFF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+          padding: const EdgeInsets.all(22),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 14),
+                const Icon(Icons.link, size: 72, color: Color(0xFF4B7BFF)),
+                const SizedBox(height: 12),
+                const Text(
+                  'LINK UP',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Row(
-                children: [
-                  Expanded(child: Divider()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text('or'),
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              const SizedBox(height: 20),
-              OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.g_mobiledata),
-                label: const Text('Continue with Google'),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(52),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                const SizedBox(height: 10),
+                const Text(
+                  'Connect. Share. Belong.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
                   ),
                 ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account? "),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const SignUpScreen()),
-                      );
-                    },
-                    child: const Text('Sign up'),
+                const SizedBox(height: 28),
+                ToggleButtons(
+                  isSelected: [showLogin, !showLogin],
+                  onPressed: (index) => setState(() => showLogin = index == 0),
+                  borderRadius: BorderRadius.circular(16),
+                  fillColor: const Color(0xFFEAF0FF),
+                  selectedColor: const Color(0xFF4B7BFF),
+                  color: Colors.black54,
+                  constraints: const BoxConstraints(minHeight: 48, minWidth: 120),
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('Login'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text('Sign Up'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 28),
+                if (showLogin) const LoginForm() else const SignUpForm(),
+                const SizedBox(height: 24),
+                const Divider(),
+                const SizedBox(height: 18),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.g_mobiledata),
+                  label: const Text('Continue with Google'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(54),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -170,60 +151,114 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Create account')),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              const CircleAvatar(
-                radius: 48,
-                backgroundColor: Color(0xFFE7EEFF),
-                child: Icon(Icons.person_add_alt_1, size: 46, color: Color(0xFF4B7BFF)),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                decoration: const InputDecoration(hintText: 'Full name'),
-              ),
-              const SizedBox(height: 14),
-              TextField(
-                decoration: const InputDecoration(hintText: 'Username'),
-              ),
-              const SizedBox(height: 14),
-              TextField(
-                decoration: const InputDecoration(hintText: 'Email'),
-              ),
-              const SizedBox(height: 14),
-              TextField(
-                obscureText: true,
-                decoration: const InputDecoration(hintText: 'Password'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(54),
-                  backgroundColor: const Color(0xFF4B7BFF),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: const Text('Create account'),
-              ),
-            ],
+    return Column(
+      children: [
+        TextField(
+          decoration: const InputDecoration(
+            hintText: 'Email or phone number',
+            prefixIcon: Icon(Icons.email_outlined),
           ),
         ),
-      ),
+        const SizedBox(height: 16),
+        TextField(
+          obscureText: true,
+          decoration: const InputDecoration(
+            hintText: 'Password',
+            prefixIcon: Icon(Icons.lock_outline),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () {},
+            child: const Text('Forgot password?'),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => const HomeScreen()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(54),
+              backgroundColor: const Color(0xFF4B7BFF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: const Text(
+              'Login',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SignUpForm extends StatelessWidget {
+  const SignUpForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const CircleAvatar(
+          radius: 42,
+          backgroundColor: Color(0xFFE7EEFF),
+          child: Icon(Icons.person_add_alt_1, size: 44, color: Color(0xFF4B7BFF)),
+        ),
+        const SizedBox(height: 18),
+        TextField(
+          decoration: const InputDecoration(hintText: 'Full name'),
+        ),
+        const SizedBox(height: 14),
+        TextField(
+          decoration: const InputDecoration(hintText: 'Username'),
+        ),
+        const SizedBox(height: 14),
+        TextField(
+          decoration: const InputDecoration(hintText: 'Email address'),
+        ),
+        const SizedBox(height: 14),
+        TextField(
+          obscureText: true,
+          decoration: const InputDecoration(hintText: 'Password'),
+        ),
+        const SizedBox(height: 14),
+        TextField(
+          decoration: const InputDecoration(hintText: 'Date of birth'),
+        ),
+        const SizedBox(height: 18),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => const HomeScreen()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size.fromHeight(54),
+              backgroundColor: const Color(0xFF4B7BFF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            child: const Text('Create account'),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -238,7 +273,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
+  final List<Widget> _screens = const [
     FeedScreen(),
     DiscoverScreen(),
     CreatePostScreen(),
@@ -256,18 +291,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.message_outlined)),
         ],
       ),
       body: IndexedStack(
         index: _selectedIndex,
-        children: _pages,
+        children: _screens,
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (value) {
-          setState(() => _selectedIndex = value);
+        onDestinationSelected: (index) {
+          setState(() => _selectedIndex = index);
         },
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
@@ -287,13 +322,13 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final posts = [
-      'Building something great for our community. #linkup',
-      'Road trip + product ideas + coffee. What is everyone building?',
-      'New launch today! Sharing more stories and thoughtful moments with friends.',
+      'Building a stronger, more connected digital community. #linkup #growth',
+      'The best products are the ones people feel part of. Let’s build more together.',
+      'A refreshing morning, a good idea, and a community that supports every step.',
     ];
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       itemCount: posts.length,
       itemBuilder: (context, index) {
         return Container(
@@ -301,7 +336,14 @@ class FeedScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x0A000000),
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,15 +374,21 @@ class FeedScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 14),
-              Text(posts[index]),
+              Text(posts[index], style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 14),
               Container(
                 height: 180,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: const LinearGradient(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                  gradient: LinearGradient(
                     colors: [Color(0xFF7A5CFF), Color(0xFF4B7BFF)],
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
                   ),
+                ),
+                child: const Center(
+                  child: Icon(Icons.photo_library_outlined, size: 52, color: Colors.white),
                 ),
               ),
               const SizedBox(height: 14),
@@ -354,7 +402,7 @@ class FeedScreen extends StatelessWidget {
                   Spacer(),
                   Text('2.4k reactions'),
                 ],
-              )
+              ),
             ],
           ),
         );
@@ -384,13 +432,13 @@ class DiscoverScreen extends StatelessWidget {
                 .map(
                   (tag) => Chip(
                     label: Text(tag),
-                    backgroundColor: const Color(0xFFE9EFFF),
+                    backgroundColor: const Color(0xFFEAF0FF),
                     labelStyle: const TextStyle(color: Color(0xFF4B7BFF)),
                   ),
                 )
                 .toList(),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           Expanded(
             child: GridView.builder(
               itemCount: 8,
@@ -407,7 +455,7 @@ class DiscoverScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Center(
-                    child: Icon(Icons.image, size: 48, color: Color(0xFF4B7BFF)),
+                    child: Icon(Icons.image, size: 50, color: Color(0xFF4B7BFF)),
                   ),
                 );
               },
@@ -432,7 +480,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       child: Column(
         children: [
           const Text('Create Post', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800)),
@@ -476,6 +524,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(54),
                 backgroundColor: const Color(0xFF4B7BFF),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
               child: const Text('Publish'),
             ),
@@ -510,7 +561,6 @@ class MessagesScreen extends StatelessWidget {
           title: Text(chat['name'] as String),
           subtitle: Text(chat['preview'] as String),
           trailing: Text(chat['time'] as String),
-          onTap: () {},
         );
       },
     );
@@ -550,8 +600,8 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(height: 12),
           const Text('Product designer • building meaningful digital experiences'),
           const SizedBox(height: 18),
-          Row(
-            children: const [
+          const Row(
+            children: [
               Expanded(child: StatTile(label: 'Followers', value: '24.8k')),
               Expanded(child: StatTile(label: 'Following', value: '328')),
               Expanded(child: StatTile(label: 'Friends', value: '820')),
@@ -668,8 +718,8 @@ class AdminScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Expanded(child: StatTile(label: 'Users', value: '12.8k')),
                 Expanded(child: StatTile(label: 'Reports', value: '326')),
               ],

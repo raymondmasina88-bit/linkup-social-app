@@ -1,29 +1,27 @@
 # LINK UP
 
-A modern social media platform built with Flutter and Firebase for Android.
+A modern social media app project built in Flutter and designed for Firebase backend integration.
 
-## Features
-- Authentication (sign up, login, password reset)
-- Profiles with cover and avatar support
-- News feed with posts, reactions, comments, and sharing
-- Stories, messaging, search, notifications and settings
-- Admin dashboard with reports and moderation
-- Firebase-ready Firestore and Storage architecture
-- Optimized for low-bandwidth mobile usage
+## Included
+- Splash screen and onboarding-style auth flow
+- Login and signup screens
+- Home feed, discover, create-post, messages, profile, settings, and admin UI
+- Theme with LINK UP colors and rounded design
+- Firebase-ready architecture using Firestore and Storage services
 
-## Tech Stack
+## Stack
 - Flutter
 - Firebase Authentication
 - Cloud Firestore
 - Firebase Storage
 - Firebase Cloud Messaging
 
-## Setup Steps
+## Run locally
 1. Install Flutter SDK and Android Studio.
-2. Create a Firebase project and enable Authentication, Firestore, Storage, and Cloud Messaging.
-3. Register your Android app in Firebase.
+2. Create a Firebase project.
+3. Enable Firebase Authentication, Firestore, Storage, and Cloud Messaging.
 4. Download `google-services.json` and place it in `android/app/`.
-5. Replace the placeholder Firebase values in `lib/firebase_options.dart`.
+5. Add Firebase config values to `lib/firebase_options.dart`.
 6. Run:
 
 ```bash
@@ -31,5 +29,5 @@ flutter pub get
 flutter run
 ```
 
-## Note
-This repository contains a production-ready architecture and Flutter codebase for a social app MVP. You still need to add your own Firebase project credentials before deploying.
+## Notes
+This project is a fully structured MVP starter for LINK UP and is ready for Firebase integration and extension into a production-ready social app.
