@@ -1,0 +1,43 @@
+name: link_up
+
+description: LINK UP - Modern social media app
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.0
+  firebase_core: ^3.1.1
+  firebase_auth: ^5.5.1
+  cloud_firestore: ^5.0.0
+  firebase_storage: ^12.0.0
+  firebase_messaging: ^15.0.0
+  google_fonts: ^6.2.1
+  cached_network_image: ^3.1.1
+  image_picker: ^1.0.0
+  intl: ^0.19.0
+  provider: ^6.0.0
+  connectivity_plus: ^6.1.0
+  permission_handler: ^11.0.0
+  uuid: ^4.5.1
+  timeago: ^3.0.0
+  share_plus: ^10.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
